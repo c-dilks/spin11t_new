@@ -12,7 +12,7 @@
 
 void Bin_Splitter(Int_t phi_bins = 10,
                   Int_t eta_bins = 1,
-                  Int_t pt_bins = 1,
+                  Int_t pt_bins = 0,
                   Int_t en_bins = 1,
                   Int_t STG1_in = 2,
                   Int_t STG2_in = 1,
@@ -45,13 +45,33 @@ void Bin_Splitter(Int_t phi_bins = 10,
   Double_t phi_low=-3.15;
   Double_t phi_high=3.15;
 
-  Double_t eta_low=2.5;
-  Double_t eta_high=4.2; // can go up to 4.5, but do we trust the edge data?
 
-  Double_t pt_low=0.0;   // lowest acceptable pT for runs 12 & 13; hard kin. cutoff overrides this
+  /////////////////////////////
+  Int_t whichEtaCut = 0; // 0-full, 1-large_cells, 2-small_cells
+  /////////////////////////////
+  Double_t eta_border = 3.28;
+
+  Double_t eta_low=2.65; // see one_bin.root for full eta distribution
+  Double_t eta_high=3.9;
+  Int_t eta_bins=1;
+
+  switch(whichEtaCut)
+  {
+    case 1:
+      eta_high=eta_border;
+      break;
+    case 2:
+      eta_low=eta_border;
+      break;
+  };
+  /////////////////////////////
+
+
+
+  Double_t pt_low=2.0;   // lowest of the longitudinal low cutoff (NEED TO CHECK pT dists)
   Double_t pt_high=10.0; // pi0 reconstruction is unreliable for pT>15
 
-  Double_t en_low=10; // E>30 cutoff point for pi0s; should allow sph & thr to go lower
+  Double_t en_low=30; // E>30 cutoff point for pi0s; should allow sph & thr to go lower
   Double_t en_high=100; // can go up to 255, but cluster merging for pi0s is problem for E>100
 
   char efile[64];
@@ -114,33 +134,28 @@ void Bin_Splitter(Int_t phi_bins = 10,
   }
   else
   {
-    // for en_bins=1 and eta_bins=1 -- 6 bin scheme
-    ///*
-    pt_bins=7;
-    printf("export PT_BINS=%d\n",pt_bins);
-    printf("export PT_DIV_0=%f\n",pt_low);
-    printf("export PT_DIV_1=%f\n",1.5);
-    printf("export PT_DIV_2=%f\n",2.5);
-    printf("export PT_DIV_3=%f\n",3.5);
-    printf("export PT_DIV_4=%f\n",4.75);
-    printf("export PT_DIV_5=%f\n",6);
-    printf("export PT_DIV_6=%f\n",8);
-    printf("export PT_DIV_7=%f\n",pt_high);
-    //*/
-    // for en_bins=1 and eta_bins=1 -- 8 bin scheme
-    /*
-    pt_bins=8;
-    printf("export PT_BINS=%d\n",pt_bins);
-    printf("export PT_DIV_0=%f\n",pt_low);
-    printf("export PT_DIV_1=%f\n",3);
-    printf("export PT_DIV_2=%f\n",3.5);
-    printf("export PT_DIV_3=%f\n",4);
-    printf("export PT_DIV_4=%f\n",4.5);
-    printf("export PT_DIV_5=%f\n",5.5);
-    printf("export PT_DIV_6=%f\n",6.5);
-    printf("export PT_DIV_7=%f\n",8);
-    printf("export PT_DIV_8=%f\n",pt_high);
-    */
+    if(whichEtaCut==0 || whichEtaCut==1)
+    {
+      pt_bins=6;
+      printf("export PT_BINS=%d\n",pt_bins);
+      printf("export PT_DIV_0=%f\n",pt_low);
+      printf("export PT_DIV_1=%f\n",3);
+      printf("export PT_DIV_2=%f\n",4);
+      printf("export PT_DIV_3=%f\n",5);
+      printf("export PT_DIV_4=%f\n",6.5);
+      printf("export PT_DIV_5=%f\n",8);
+      printf("export PT_DIV_6=%f\n",pt_high);
+    }
+    else if(whichEtaCut==2)
+    {
+      pt_bins=4;
+      printf("export PT_BINS=%d\n",pt_bins);
+      printf("export PT_DIV_0=%f\n",pt_low);
+      printf("export PT_DIV_1=%f\n",2.75);
+      printf("export PT_DIV_2=%f\n",3.5);
+      printf("export PT_DIV_3=%f\n",4.25);
+      printf("export PT_DIV_4=%f\n",pt_high);
+    };
   };
 
     

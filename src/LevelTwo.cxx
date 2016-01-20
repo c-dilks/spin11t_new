@@ -7,24 +7,33 @@ ClassImp(LevelTwo)
 
 namespace
 {
-  const Int_t N_TRIG = 1;
+  const Int_t N_TRIG = 17;
   enum trigger_enum 
   {
-    kAll
+    kAll,
+    kHT0,
+    kHT1,
+    kSmBS0,
+    kSmBS1,
+    kSmBS2,
+    kLgBS0,
+    kLgBS1,
+    kLgBS2,
+    kJP0,
+    kJP1,
+    kJP2,
+    kdijet,
+    kunused1,
+    kunused2,
+    kFPE,
+    kunused3
   };
-  const Int_t N_RPTRIG = 1;
-  enum rptrigger_enum
-  {
-    krpAll
-  };
-  const Int_t int_max = 0xFFFFFFFF;
+  const Int_t int_max = 0xFFFF;
 };
 
 LevelTwo::LevelTwo()
 {
   N = N_TRIG;
-  NRP = N_RPTRIG;
-
 
   // get spindir
   if(gSystem->Getenv("SPINDIR")==NULL){fprintf(stderr,"ERROR: source env vars\n");return;};
@@ -32,56 +41,55 @@ LevelTwo::LevelTwo()
 
 
   // fms trigger names
-  trigger_name.insert(std::pair<Int_t,char*>(kAll,"All")); // all triggers except LED
+  trigger_name.insert(std::pair<Int_t,char*>(kAll,"All"));
+  trigger_name.insert(std::pair<Int_t,char*>(kHT0,"HT0"));
+  trigger_name.insert(std::pair<Int_t,char*>(kHT1,"HT1"));
+  trigger_name.insert(std::pair<Int_t,char*>(kSmBS0,"SmBS0"));
+  trigger_name.insert(std::pair<Int_t,char*>(kSmBS1,"SmBS1"));
+  trigger_name.insert(std::pair<Int_t,char*>(kSmBS2,"SmBS2"));
+  trigger_name.insert(std::pair<Int_t,char*>(kLgBS0,"LgBS0"));
+  trigger_name.insert(std::pair<Int_t,char*>(kLgBS1,"LgBS1"));
+  trigger_name.insert(std::pair<Int_t,char*>(kLgBS2,"LgBS2"));
+  trigger_name.insert(std::pair<Int_t,char*>(kJP0,"JP0"));
+  trigger_name.insert(std::pair<Int_t,char*>(kJP1,"JP1"));
+  trigger_name.insert(std::pair<Int_t,char*>(kJP2,"JP2"));
+  trigger_name.insert(std::pair<Int_t,char*>(kdijet,"dijet"));
+  trigger_name.insert(std::pair<Int_t,char*>(kunused1,"unused1"));
+  trigger_name.insert(std::pair<Int_t,char*>(kunused2,"unused2"));
+  trigger_name.insert(std::pair<Int_t,char*>(kFPE,"FPE"));
+  trigger_name.insert(std::pair<Int_t,char*>(kunused3,"unused3"));
 
-  trigger_dbname.insert(std::pair<Int_t,char*>(kAll,"All")); // unused
 
-  std::map<char*,Int_t> trigger_name_idx; // trigger name --> trigger idx
-  std::map<char*,Int_t> trigger_dbname_idx; // trigger dbname --> trigger idx
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kAll,0xFFF));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kHT0,1<<0));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kHT1,1<<1));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kSmBS0,1<<2));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kSmBS1,1<<3));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kSmBS2,1<<4));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kLgBS0,1<<5));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kLgBS1,1<<6));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kLgBS2,1<<7));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kJP0,1<<8));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kJP1,1<<9));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kJP2,1<<10));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kdijet,1<<11));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kunused1,1<<12));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kunused2,1<<13));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kFPE,1<<14));
+  trigger_bitmask.insert(std::pair<Int_t,Int_t>(kunused3,1<<15));
+
+
+  //std::map<char*,Int_t> trigger_idx; // trigger name --> trigger idx
+  //std::map<Int_t,Int_t> trigger_bitmask_rev; // trigger FP201 bit mask --> trigger idx
   for(Int_t t=0; t<N_TRIG; t++)
   {
     trigger_idx.insert(std::pair<std::string,Int_t>(std::string(trigger_name[t]),t));
-    trigger_dbidx.insert(std::pair<std::string,Int_t>(std::string(trigger_dbname[t]),t));
-  };
-
-
-  // rp trigger names
-  rptrigger_name.insert(std::pair<Int_t,char*>(krpAll,"All")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpSD,"SD")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpSDT,"SDT")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpRPZMU,"RPZMU")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpRPZE,"RPZE")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpRP2MU,"RP2MU")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpRP2E,"RP2E")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpCPT2,"CPT2")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpET,"ET")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpCP,"CP")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpCPEI,"CPEI")); 
-  //rptrigger_name.insert(std::pair<Int_t,char*>(krpZerobias,"Zerobias")); 
-
-  rptrigger_dbname.insert(std::pair<Int_t,char*>(krpAll,"All")); // unused
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpSD,"RP_SD")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpSDT,"RP_SDT")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpRPZMU,"RP_RPZMU")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpRPZE,"RP_RPZE")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpRP2MU,"RP_RP2MU")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpRP2E,"RP_RP2E")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpCPT2,"RP_CPT2")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpET,"RP_ET")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpCP,"RP_CP")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpCPEI,"RP_CPEI")); 
-  //rptrigger_dbname.insert(std::pair<Int_t,char*>(krpZerobias,"RP_Zerobias")); 
-
-  std::map<char*,Int_t> rptrigger_name_idx; // trigger name --> trigger idx
-  std::map<char*,Int_t> rptrigger_dbname_idx; // trigger dbname --> trigger idx
-  for(Int_t t=0; t<N_RPTRIG; t++)
-  {
-    rptrigger_idx.insert(std::pair<std::string,Int_t>(std::string(rptrigger_name[t]),t));
-    rptrigger_dbidx.insert(std::pair<std::string,Int_t>(std::string(rptrigger_dbname[t]),t));
+    trigger_bitmaskrev.insert(std::pair<Int_t,Int_t>(trigger_bitmask[t],t));
   };
 
 
   // read trigid.dat
+  /*
   id_tr = new TTree();
   char trigidfile[512];
   sprintf(trigidfile,"%s/trigid.dat",spindir);
@@ -114,7 +122,7 @@ LevelTwo::LevelTwo()
       idx = trigger_dbidx.at(std::string(name));
 
       mask = (long)1 << dbidx;
-      /*if(idx!=kLED)*/ allmask = allmask | mask;
+      //if(idx!=kLED) allmask = allmask | mask;
 
       trig_idx.insert(std::pair<Int_t,Long_t>(idx,mask));
       if(rn != rn_tmp || i+1==id_tr->GetEntries())
@@ -149,6 +157,7 @@ LevelTwo::LevelTwo()
     }
     else fprintf(stderr,"ERROR: not FMS or RP trigger\n");
   };
+  */
 };
 
 // fms accessors
@@ -158,6 +167,8 @@ Int_t LevelTwo::Index(char * trigger0)
   return trigger_idx.at(std::string(trigger0));
 };
 
+
+/*
 Int_t LevelTwo::Mask(Int_t run, char * trigger0, Int_t dword)
 {
   Int_t retval;
@@ -181,45 +192,33 @@ Int_t LevelTwo::Mask(Int_t run, Int_t num0, Int_t dword)
   };
   return retval;
 };
+*/
+
+Int_t LevelTwo::Mask(char * trigger0)
+{
+  Int_t retval;
+  try { retval = trigger_bitmask.at(Index(trigger0)); }
+  catch(const std::out_of_range& e)
+  {
+    fprintf(stderr,"[+] bad trigger name in LevelTwo::Mask(%s)\n",trigger0);
+    retval=0;
+  };
+  return retval;
+};
+
+Int_t LevelTwo::Mask(Int_t num0)
+{
+  Int_t retval;
+  try { retval = trigger_bitmask.at(num0); }
+  catch(const std::out_of_range& e)
+  {
+    fprintf(stderr,"[+] bad trigger number in LevelTwo::Mask(%d)\n",num0);
+    retval=0;
+  };
+  return retval;
+};
 
 char * LevelTwo::Name(Int_t num0)
 {
   return trigger_name.at(num0);
-};
-
-
-// rp accessors
-//////////////////
-Int_t LevelTwo::RP_Index(char * trigger0)
-{
-  return rptrigger_idx.at(std::string(trigger0));
-};
-
-Int_t LevelTwo::RP_Mask(Int_t run, char * trigger0, Int_t dword)
-{
-  Int_t retval;
-  try { retval = (rpmask_map.at(run).at(RP_Index(trigger0)) >> (32*dword)) & int_max; }
-  catch(const std::out_of_range& e) 
-  {
-    //fprintf(stderr,"[+] no RP triggers for run %d\n",run);
-    retval=0;
-  };
-  return retval;
-};
-
-Int_t LevelTwo::RP_Mask(Int_t run, Int_t num0, Int_t dword)
-{
-  Int_t retval;
-  try { retval = (rpmask_map.at(run).at(num0) >> (32*dword)) & int_max; }
-  catch(const std::out_of_range& e) 
-  {
-    //fprintf(stderr,"[+] no RP triggers for run %d\n",run);
-    retval=0;
-  };
-  return retval;
-};
-
-char * LevelTwo::RP_Name(Int_t num0)
-{
-  return rptrigger_name.at(num0);
 };
