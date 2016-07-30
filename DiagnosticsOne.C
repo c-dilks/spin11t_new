@@ -11,9 +11,9 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
   // here is deprecated
   const Bool_t enableOverlap = false;
 
-  const Int_t NBINS=400; // NUMBER OF BINS (default 400)
-  const Int_t NBINS_RDIST=10; // number of bins for variable vs. run index plots (default 100)
-  const Int_t MAXRUNS=12; // arbitrary max number of runs in redset file 
+  const Int_t NBINS=1; // NUMBER OF BINS (default 400)
+  const Int_t NBINS_RDIST=100; // number of bins for variable vs. run index plots (default 100)
+  const Int_t MAXRUNS=20; // arbitrary max number of runs in redset file 
 
   enum ew_enum {kE,kW};
   enum io_enum {kI,kO};
@@ -22,7 +22,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
 
   gSystem->Load("src/RunInfo.so");
   RunInfo * RD = new RunInfo();
-  //LevelTwo * T = new LevelTwo();
+  LevelTwo * LT = new LevelTwo();
   Environ * env = new Environ();
   EventClass * ev = new EventClass();
   /*
@@ -78,9 +78,8 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
 
 
   // trigger list
-  //Int_t N_TRIG_tmp = T->N;
-  //const Int_t N_TRIG = N_TRIG_tmp;
-  const Int_t N_TRIG=1;
+  Int_t N_TRIG_tmp = LT->N;
+  const Int_t N_TRIG = N_TRIG_tmp;
 
   // event classes
   Int_t N_CLASS_tmp = ev->N;
@@ -192,50 +191,50 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
       };
       */
 
-      sprintf(pt_vs_eta_n[c][t],"%s_%s_pt_vs_eta","trig",ev->Name(c));
-      sprintf(en_vs_eta_n[c][t],"%s_%s_en_vs_eta","trig",ev->Name(c));
-      sprintf(pt_vs_phi_n[c][t],"%s_%s_pt_vs_phi","trig",ev->Name(c));
-      sprintf(en_vs_phi_n[c][t],"%s_%s_en_vs_phi","trig",ev->Name(c));
-      sprintf(eta_vs_phi_n[c][t],"%s_%s_eta_vs_phi","trig",ev->Name(c));
-      sprintf(pt_vs_en_n[c][t],"%s_%s_pt_vs_en","trig",ev->Name(c));
-      sprintf(y_vs_x_n[c][t],"%s_%s_y_vs_x","trig",ev->Name(c));
-      sprintf(z_vs_eta_n[c][t],"%s_%s_z_vs_eta","trig",ev->Name(c));
-      sprintf(z_vs_phi_n[c][t],"%s_%s_z_vs_phi","trig",ev->Name(c));
-      sprintf(mass_vs_en_n[c][t],"%s_%s_mass_vs_en","trig",ev->Name(c));
-      sprintf(mass_vs_pt_n[c][t],"%s_%s_mass_vs_pt","trig",ev->Name(c));
-      sprintf(mass_dist_n[c][t],"%s_%s_mass_dist","trig",ev->Name(c));
-      sprintf(z_dist_n[c][t],"%s_%s_z_dist","trig",ev->Name(c));
+      sprintf(pt_vs_eta_n[c][t],"%s_%s_pt_vs_eta",LT->Name(t),ev->Name(c));
+      sprintf(en_vs_eta_n[c][t],"%s_%s_en_vs_eta",LT->Name(t),ev->Name(c));
+      sprintf(pt_vs_phi_n[c][t],"%s_%s_pt_vs_phi",LT->Name(t),ev->Name(c));
+      sprintf(en_vs_phi_n[c][t],"%s_%s_en_vs_phi",LT->Name(t),ev->Name(c));
+      sprintf(eta_vs_phi_n[c][t],"%s_%s_eta_vs_phi",LT->Name(t),ev->Name(c));
+      sprintf(pt_vs_en_n[c][t],"%s_%s_pt_vs_en",LT->Name(t),ev->Name(c));
+      sprintf(y_vs_x_n[c][t],"%s_%s_y_vs_x",LT->Name(t),ev->Name(c));
+      sprintf(z_vs_eta_n[c][t],"%s_%s_z_vs_eta",LT->Name(t),ev->Name(c));
+      sprintf(z_vs_phi_n[c][t],"%s_%s_z_vs_phi",LT->Name(t),ev->Name(c));
+      sprintf(mass_vs_en_n[c][t],"%s_%s_mass_vs_en",LT->Name(t),ev->Name(c));
+      sprintf(mass_vs_pt_n[c][t],"%s_%s_mass_vs_pt",LT->Name(t),ev->Name(c));
+      sprintf(mass_dist_n[c][t],"%s_%s_mass_dist",LT->Name(t),ev->Name(c));
+      sprintf(z_dist_n[c][t],"%s_%s_z_dist",LT->Name(t),ev->Name(c));
 
       sprintf(pt_vs_eta_t[c][t],"%s %s --- p_{T} vs. #eta%s;#eta;p_{T}",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
       sprintf(en_vs_eta_t[c][t],"%s %s --- E vs. #eta%s;#eta;E",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
       sprintf(pt_vs_phi_t[c][t],"%s %s --- p_{T} vs. #phi%s;#phi;p_{T}",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
       sprintf(en_vs_phi_t[c][t],"%s %s --- E vs. #phi%s;#phi;E",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
       sprintf(eta_vs_phi_t[c][t],"%s %s --- #eta vs. #phi%s;#phi;#eta",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
       sprintf(pt_vs_en_t[c][t],"%s %s --- p_{T} vs. E%s;E;p_{T}",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
       sprintf(y_vs_x_t[c][t],"%s %s --- y vs. x%s;x;y",
-        "trig",ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),RP_select_t);
 
       //printf("here\n");
       sprintf(z_vs_eta_t[c][t],"%s %s --- Z vs. #eta (%s cuts w/o Z-cut)%s;#eta;Z",
-        "trig",ev->Title(c),ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),ev->Title(c),RP_select_t);
       sprintf(z_vs_phi_t[c][t],"%s %s --- Z vs. #phi (%s cuts w/o Z-cut)%s;#phi;Z",
-        "trig",ev->Title(c),ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),ev->Title(c),RP_select_t);
       sprintf(mass_vs_en_t[c][t],"%s %s --- M vs. E (%s cuts w/o M-cut)%s;E;M",
-        "trig",ev->Title(c),ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),ev->Title(c),RP_select_t);
       sprintf(mass_vs_pt_t[c][t],"%s %s --- M vs. p_{T} (%s cuts w/o M-cut)%s;p_{T};M",
-        "trig",ev->Title(c),ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),ev->Title(c),RP_select_t);
       //printf("VVVVV\n");
       sprintf(mass_dist_t[c][t],"%s %s --- M distribution (%s cuts w/o M-cut)%s;M",
-        "trig",ev->Title(c),ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),ev->Title(c),RP_select_t);
       //printf("%s\n",mass_dist_t[c][t]);
       sprintf(z_dist_t[c][t],"%s %s --- Z distribution (%s cuts w/o Z-cut)%s;Z",
-        "trig",ev->Title(c),ev->Title(c),RP_select_t);
+        LT->Name(t),ev->Title(c),ev->Title(c),RP_select_t);
       //printf("^^^^^\n");
 
       pt_vs_eta[c][t] = new TH2D(pt_vs_eta_n[c][t],pt_vs_eta_t[c][t],
@@ -264,15 +263,15 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
       z_dist[c][t] = new TH1D(z_dist_n[c][t],z_dist_t[c][t],NBINS,0,1);
       mass_dist[c][t] = new TH1D(mass_dist_n[c][t],mass_dist_t[c][t],NBINS,low_mass,high_mass);
 
-      //printf("----- c=%d t=%d %s %s\n",c,t,ev->Name(c),"trig");
+      //printf("----- c=%d t=%d %s %s\n",c,t,ev->Name(c),LT->Name(t));
       for(Int_t ru=0; ru<MAXRUNS; ru++)
       {
-        sprintf(pt_rdist_n[c][t][ru],"%s_%s_pt_rdist","trig",ev->Name(c));
-        sprintf(en_rdist_n[c][t][ru],"%s_%s_en_rdist","trig",ev->Name(c));
-        sprintf(eta_rdist_n[c][t][ru],"%s_%s_eta_rdist","trig",ev->Name(c));
-        sprintf(phi_rdist_n[c][t][ru],"%s_%s_phi_rdist","trig",ev->Name(c));
-        sprintf(mass_rdist_n[c][t][ru],"%s_%s_mass_rdist","trig",ev->Name(c));
-        sprintf(z_rdist_n[c][t][ru],"%s_%s_z_rdist","trig",ev->Name(c));
+        sprintf(pt_rdist_n[c][t][ru],"%s_%s_pt_rdist",LT->Name(t),ev->Name(c));
+        sprintf(en_rdist_n[c][t][ru],"%s_%s_en_rdist",LT->Name(t),ev->Name(c));
+        sprintf(eta_rdist_n[c][t][ru],"%s_%s_eta_rdist",LT->Name(t),ev->Name(c));
+        sprintf(phi_rdist_n[c][t][ru],"%s_%s_phi_rdist",LT->Name(t),ev->Name(c));
+        sprintf(mass_rdist_n[c][t][ru],"%s_%s_mass_rdist",LT->Name(t),ev->Name(c));
+        sprintf(z_rdist_n[c][t][ru],"%s_%s_z_rdist",LT->Name(t),ev->Name(c));
 
         sprintf(pt_rdist_n_tmp[c][t][ru],"%s_%d",pt_rdist_n[c][t][ru],ru);
         sprintf(en_rdist_n_tmp[c][t][ru],"%s_%d",en_rdist_n[c][t][ru],ru);
@@ -307,10 +306,10 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
   {
     for(Int_t ee=0; ee<10; ee++)
     {
-      sprintf(mass_dist_for_enbin_n[t][ee],"%s_mass_dist_for_enbin%d","trig",ee);
+      sprintf(mass_dist_for_enbin_n[t][ee],"%s_mass_dist_for_enbin%d",LT->Name(t),ee);
       sprintf(mass_dist_for_enbin_t[t][ee],
         "%s M_{#gamma#gamma} distribution for E_{#gamma#gamma}#in[%d,%d) GeV",
-        "trig",ee*10,(ee+1)*10);
+        LT->Name(t),ee*10,(ee+1)*10);
       mass_dist_for_enbin[t][ee] = 
         new TH1D(mass_dist_for_enbin_n[t][ee],mass_dist_for_enbin_t[t][ee],NBINS,0,1);
     };
@@ -324,10 +323,10 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
   {
     for(Int_t pp=0; pp<10; pp++)
     {
-      sprintf(mass_dist_for_ptbin_n[t][pp],"%s_mass_dist_for_ptbin%d","trig",pp);
+      sprintf(mass_dist_for_ptbin_n[t][pp],"%s_mass_dist_for_ptbin%d",LT->Name(t),pp);
       sprintf(mass_dist_for_ptbin_t[t][pp],
         "%s M_{#gamma#gamma} distribution for p_{T}#in[%d,%d) GeV/c",
-        "trig",pp,pp+1);
+        LT->Name(t),pp,pp+1);
       mass_dist_for_ptbin[t][pp] = 
         new TH1D(mass_dist_for_ptbin_n[t][pp],mass_dist_for_ptbin_t[t][pp],NBINS,0,1);
     };
@@ -338,7 +337,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
   char trig_dist_t[64];
   sprintf(trig_dist_t,"Trigger Counts%s",RP_select_t);
   TH1D * trig_dist = new TH1D("trig_dist",trig_dist_t,N_TRIG,0,N_TRIG);
-  for(Int_t t=0; t<N_TRIG; t++) trig_dist->GetXaxis()->SetBinLabel(t+1,"trig");
+  for(Int_t t=0; t<N_TRIG; t++) trig_dist->GetXaxis()->SetBinLabel(t+1,LT->Name(t));
 
   // trigger mix for FMS and RP
   /*
@@ -379,9 +378,9 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
 
     for(Int_t t=0; t<N_TRIG; t++) 
     {
-      trig_fms_mix[c]->GetXaxis()->SetBinLabel(t+1,"trig");
-      trig_fms_mix[c]->GetYaxis()->SetBinLabel(t+1,"trig");
-      trig_fmsrp_mix[c]->GetYaxis()->SetBinLabel(t+1,"trig");
+      trig_fms_mix[c]->GetXaxis()->SetBinLabel(t+1,LT->Name(t));
+      trig_fms_mix[c]->GetYaxis()->SetBinLabel(t+1,LT->Name(t));
+      trig_fmsrp_mix[c]->GetYaxis()->SetBinLabel(t+1,LT->Name(t));
     };
     /*
     for(Int_t t=0; t<N_RP; t++)
@@ -455,8 +454,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
       // fill fms trigger plot
       for(Int_t t=0; t<N_TRIG; t++)
       {
-        //if(L2sum[1] & T->Mask(runnum,t,1) /*&& trg_bool->Fired(env->RPselect)*/)
-        if(TrigBits&0x200)
+        if(TrigBits & LT->Mask(t))
           trig_dist->Fill(t);
       };
 
@@ -473,8 +471,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
           ev->FiducialGeom(Eta,Phi,0); // compute x and y coordinates
           for(Int_t t=0; t<N_TRIG; t++)
           {
-            //if(L2sum[1] & T->Mask(runnum,t,1))
-            if(TrigBits&0x200)
+            if(TrigBits & LT->Mask(t))
             {
               //if(trg_bool->Fired(env->RPselect))
               if(true)
@@ -498,8 +495,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
               {
                 for(Int_t tt=0; tt<N_TRIG; tt++)
                 {
-                  //if(L2sum[1] & T->Mask(runnum,tt,1))
-                  if(TrigBits&0x200)
+                  if(TrigBits & LT->Mask(t))
                     trig_fms_mix[c]->Fill(t,tt);
                 };
                 /*
@@ -510,7 +506,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
                     trig_fmsrp_mix[c]->Fill(r,t);
 
                     // only fill trig_rp_mix for OR of FMS triggers
-                    if(!strcmp("trig","All"))
+                    if(!strcmp(LT->Name(t),"All"))
                     {
                       for(Int_t rr=0; rr<N_RP; rr++)
                       {
@@ -531,8 +527,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
         {
           for(Int_t t=0; t<N_TRIG; t++)
           {
-            //if(L2sum[1] & T->Mask(runnum,t,1))
-            if(TrigBits&0x200)
+            if(TrigBits & LT->Mask(t))
             {
               //if(trg_bool->Fired(env->RPselect))
               if(true)
@@ -563,8 +558,7 @@ void DiagnosticsOne(const char * infile_name = "RedOutputset088a.root")
         {
           for(Int_t t=0; t<N_TRIG; t++)
           {
-            //if(L2sum[1] & T->Mask(runnum,t,1))
-            if(TrigBits&0x200)
+            if(TrigBits & LT->Mask(t))
             {
               //if(trg_bool->Fired(env->RPselect))
               if(true)

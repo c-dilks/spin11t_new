@@ -148,13 +148,12 @@ void Bin_Splitter(Int_t phi_bins = 10,
     }
     else if(whichEtaCut==2)
     {
-      pt_bins=4;
+      pt_bins=3;
       printf("export PT_BINS=%d\n",pt_bins);
       printf("export PT_DIV_0=%f\n",pt_low);
-      printf("export PT_DIV_1=%f\n",2.75);
-      printf("export PT_DIV_2=%f\n",3.5);
-      printf("export PT_DIV_3=%f\n",4.25);
-      printf("export PT_DIV_4=%f\n",pt_high);
+      printf("export PT_DIV_1=%f\n",3);
+      printf("export PT_DIV_2=%f\n",4);
+      printf("export PT_DIV_3=%f\n",pt_high);
     };
   };
 
