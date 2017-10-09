@@ -178,8 +178,10 @@ void DrawAsymmetries(const char * evclass="pi0", const char * filetype="png", co
 
 
   // canvas sizes
-  Float_t hsize = 800;
-  Float_t vsize = 1000;
+  //Float_t hsize = 800;
+  //Float_t vsize = 1000;
+  Float_t hsize = 1600;
+  Float_t vsize = 2000;
 
 
   // draw asym kin dep canvas

@@ -19,22 +19,20 @@ export PHI_DIV_8=1.890000
 export PHI_DIV_9=2.520000
 export PHI_DIV_10=3.150000
 
-export ETA_LOW=2.650000
+export ETA_LOW=3.100000
 export ETA_HIGH=3.900000
 export ETA_BINS=1
-export ETA_DIV_0=2.650000
+export ETA_DIV_0=3.100000
 export ETA_DIV_1=3.900000
 
 export PT_LOW=2.000000
 export PT_HIGH=10.000000
-export PT_BINS=6
+export PT_BINS=4
 export PT_DIV_0=2.000000
-export PT_DIV_1=3.000000
-export PT_DIV_2=4.000000
-export PT_DIV_3=5.000000
-export PT_DIV_4=6.500000
-export PT_DIV_5=8.000000
-export PT_DIV_6=10.000000
+export PT_DIV_1=3.400000
+export PT_DIV_2=4.400000
+export PT_DIV_3=5.300000
+export PT_DIV_4=10.000000
 
 export EN_LOW=30.000000
 export EN_HIGH=100.000000

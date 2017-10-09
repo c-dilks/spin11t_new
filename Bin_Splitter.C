@@ -13,7 +13,7 @@
 void Bin_Splitter(Int_t phi_bins = 10,
                   Int_t eta_bins = 1,
                   Int_t pt_bins = 0,
-                  Int_t en_bins = 1,
+                  Int_t en_bins = 0,
                   Int_t STG1_in = 2,
                   Int_t STG2_in = 1,
                   Int_t MIPN_in = 0,
@@ -47,9 +47,9 @@ void Bin_Splitter(Int_t phi_bins = 10,
 
 
   /////////////////////////////
-  Int_t whichEtaCut = 0; // 0-full, 1-large_cells, 2-small_cells
+  Int_t whichEtaCut = 2; // 0-full, 1-large_cells, 2-small_cells
   /////////////////////////////
-  Double_t eta_border = 3.28;
+  Double_t eta_border = 3.1; // determined 10.08.17
 
   Double_t eta_low=2.65; // see one_bin.root for full eta distribution
   Double_t eta_high=3.9;
@@ -136,29 +136,48 @@ void Bin_Splitter(Int_t phi_bins = 10,
   {
     if(whichEtaCut==0 || whichEtaCut==1)
     {
-      pt_bins=6;
+      /*
+      pt_bins=5;
       printf("export PT_BINS=%d\n",pt_bins);
       printf("export PT_DIV_0=%f\n",pt_low);
       printf("export PT_DIV_1=%f\n",3);
       printf("export PT_DIV_2=%f\n",4);
       printf("export PT_DIV_3=%f\n",5);
       printf("export PT_DIV_4=%f\n",6.5);
-      printf("export PT_DIV_5=%f\n",8);
-      printf("export PT_DIV_6=%f\n",pt_high);
+      printf("export PT_DIV_5=%f\n",pt_high);
+      */
+      pt_bins=4;
+      printf("export PT_BINS=%d\n",pt_bins);
+      printf("export PT_DIV_0=%f\n",pt_low);
+      printf("export PT_DIV_1=%f\n",3.75);
+      printf("export PT_DIV_2=%f\n",5.0);
+      printf("export PT_DIV_3=%f\n",6.5);
+      printf("export PT_DIV_4=%f\n",pt_high);
     }
     else if(whichEtaCut==2)
     {
+      /*
       pt_bins=3;
       printf("export PT_BINS=%d\n",pt_bins);
       printf("export PT_DIV_0=%f\n",pt_low);
       printf("export PT_DIV_1=%f\n",3);
       printf("export PT_DIV_2=%f\n",4);
       printf("export PT_DIV_3=%f\n",pt_high);
+      */
+      pt_bins=4;
+      printf("export PT_BINS=%d\n",pt_bins);
+      printf("export PT_DIV_0=%f\n",pt_low);
+      printf("export PT_DIV_1=%f\n",3.4);
+      printf("export PT_DIV_2=%f\n",4.4);
+      printf("export PT_DIV_3=%f\n",5.3);
+      printf("export PT_DIV_4=%f\n",pt_high);
     };
   };
 
     
   // en
+  if(whichEtaCut==0 || whichEtaCut==1) en_high=70;
+  else if(whichEtaCut==2) en_high=100;
   printf("\nexport EN_LOW=%f\n",en_low);
   printf("export EN_HIGH=%f\n",en_high);
   Double_t en_width;
@@ -189,7 +208,7 @@ void Bin_Splitter(Int_t phi_bins = 10,
     printf("export EN_DIV_5=%f\n",150);
     printf("export EN_DIV_6=%f\n",en_high);
     */
-    ///*
+    /*
     en_bins=7;
     printf("export EN_BINS=%d\n",en_bins);
     printf("export EN_DIV_0=%f\n",en_low);
@@ -200,7 +219,11 @@ void Bin_Splitter(Int_t phi_bins = 10,
     printf("export EN_DIV_5=%f\n",65);
     printf("export EN_DIV_6=%f\n",80);
     printf("export EN_DIV_7=%f\n",en_high);
-    //*/
+    */
+    en_bins=1;
+    printf("export EN_BINS=%d\n",en_bins);
+    printf("export EN_DIV_0=%f\n",en_low);
+    printf("export EN_DIV_1=%f\n",en_high);
   }
   else if(en_bins==-1)
   {
